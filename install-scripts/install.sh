@@ -676,6 +676,7 @@ OPTIONS:
     --skip-checksum    Skip checksum verification (not recommended, auto-detects shasum/sha256sum/openssl)
     --install-completions  Install shell completions
     --install-manpage  Install manpage
+    --install-package-manpages  Install man pages for packages in groups
     --config FILE      Use custom TOML configuration file (default: packages.toml)
     --list-groups      List available package groups
     --install-group GROUP  Install packages from specified group
@@ -692,6 +693,8 @@ EXAMPLES:
     ./install.sh                                    # Normal installation
     ./install.sh --dry-run                          # See what would be installed
     ./install.sh --install-completions              # Install with completions
+    ./install.sh --install-manpage                  # Install manpage
+    ./install.sh --install-package-manpages         # Install package man pages
     ./install.sh --list-groups                      # List available package groups
     ./install.sh --install-group development        # Install development tools
     ./install.sh --install-group python,nodejs      # Install multiple language groups
@@ -860,6 +863,144 @@ EOF
     echo "Please restart your shell or run: source $shell_rc"
 }
 
+# Function to install man pages for packages
+install_package_manpages() {
+    toml_file="$1"
+    group="$2"
+    
+    if [ ! -f "$toml_file" ]; then
+        echo "Error: TOML configuration file not found: $toml_file"
+        return 1
+    fi
+    
+    # Detect platform
+    os=$(detect_os)
+    distro=""
+    
+    case "$os" in
+        "linux")
+            distro=$(detect_linux_distro)
+            platform="linux.$distro"
+            ;;
+        *)
+            platform="$os"
+            ;;
+    esac
+    
+    # Get package list
+    if ! package_list=$(get_package_list "$toml_file" "$group" "$platform"); then
+        echo "Error: No packages found for group '$group' on platform '$platform'"
+        return 1
+    fi
+    
+    echo "Installing man pages for packages in group '$group' on $platform..."
+    
+    # Parse package list
+    packages=$(echo "$package_list" | sed 's/^\[//;s/\]$//;s/"//g;s/'\''//g' | tr ',' ' ')
+    
+    for package in $packages; do
+        # Skip empty entries
+        if [ -z "$package" ]; then
+            continue
+        fi
+        
+        # Map package name for platform
+        mapped_package=$(map_package_name "$toml_file" "$platform" "$package")
+        
+        echo "Installing man pages for $mapped_package..."
+        
+        # Install man pages based on platform
+        case "$os" in
+            "macos")
+                # macOS: man pages are usually included with packages
+                echo "Man pages for $mapped_package should be available with the package"
+                ;;
+            "linux")
+                case "$distro" in
+                    "ubuntu"|"debian"|"linuxmint"|"pop"|"elementary"|"kali"|"parrot"|"mx"|"devuan"|"deepin"|"zorin"|"pclinuxos")
+                        # Debian-based: install -doc packages
+                        doc_package="${mapped_package}-doc"
+                        if command_exists apt; then
+                            sudo apt install -y "$doc_package" 2>/dev/null || echo "No -doc package available for $mapped_package"
+                        elif command_exists apt-get; then
+                            sudo apt-get install -y "$doc_package" 2>/dev/null || echo "No -doc package available for $mapped_package"
+                        fi
+                        ;;
+                    "fedora"|"rhel"|"centos"|"rocky"|"almalinux"|"oracle"|"amazon"|"scientific"|"openmandriva")
+                        # Red Hat-based: install -doc packages
+                        doc_package="${mapped_package}-doc"
+                        if command_exists dnf; then
+                            sudo dnf install -y "$doc_package" 2>/dev/null || echo "No -doc package available for $mapped_package"
+                        elif command_exists yum; then
+                            sudo yum install -y "$doc_package" 2>/dev/null || echo "No -doc package available for $mapped_package"
+                        fi
+                        ;;
+                    "arch"|"manjaro"|"endeavouros"|"garuda"|"arcolinux"|"artix")
+                        # Arch-based: man pages are usually included
+                        echo "Man pages for $mapped_package should be available with the package"
+                        ;;
+                    "opensuse"|"sle"|"tumbleweed"|"leap")
+                        # SUSE-based: install -doc packages
+                        doc_package="${mapped_package}-doc"
+                        sudo zypper install -y "$doc_package" 2>/dev/null || echo "No -doc package available for $mapped_package"
+                        ;;
+                    "alpine")
+                        # Alpine: man pages are usually included
+                        echo "Man pages for $mapped_package should be available with the package"
+                        ;;
+                    "gentoo"|"funtoo"|"calculate")
+                        # Gentoo: man pages are usually included
+                        echo "Man pages for $mapped_package should be available with the package"
+                        ;;
+                    "void")
+                        # Void: man pages are usually included
+                        echo "Man pages for $mapped_package should be available with the package"
+                        ;;
+                    "nixos")
+                        # NixOS: man pages are usually included
+                        echo "Man pages for $mapped_package should be available with the package"
+                        ;;
+                    "slackware"|"slax"|"salix")
+                        # Slackware: man pages are usually included
+                        echo "Man pages for $mapped_package should be available with the package"
+                        ;;
+                    "solus")
+                        # Solus: man pages are usually included
+                        echo "Man pages for $mapped_package should be available with the package"
+                        ;;
+                    "clearlinux")
+                        # Clear Linux: man pages are usually included
+                        echo "Man pages for $mapped_package should be available with the package"
+                        ;;
+                    "mageia")
+                        # Mageia: install -doc packages
+                        doc_package="${mapped_package}-doc"
+                        sudo urpmi "$doc_package" 2>/dev/null || echo "No -doc package available for $mapped_package"
+                        ;;
+                    *)
+                        echo "Unknown Linux distribution: $distro"
+                        ;;
+                esac
+                ;;
+            "freebsd")
+                # FreeBSD: man pages are usually included
+                echo "Man pages for $mapped_package should be available with the package"
+                ;;
+            "netbsd")
+                # NetBSD: man pages are usually included
+                echo "Man pages for $mapped_package should be available with the package"
+                ;;
+            "windows")
+                # Windows: man pages not applicable
+                echo "Man pages not applicable on Windows for $mapped_package"
+                ;;
+            *)
+                echo "Unknown operating system: $os"
+                ;;
+        esac
+    done
+}
+
 # Function to install manpage
 install_manpage() {
     script_dir="$(cd "$(dirname "$0")" && pwd)"
@@ -962,6 +1103,7 @@ EOF
 parse_args() {
     install_completions=false
     install_manpage=false
+    install_package_manpages=false
     dry_run=false
     skip_checksum=false
     config_file="packages.toml"
@@ -992,6 +1134,10 @@ parse_args() {
                 ;;
             --install-manpage)
                 install_manpage=true
+                shift
+                ;;
+            --install-package-manpages)
+                install_package_manpages=true
                 shift
                 ;;
             --config)
@@ -1027,6 +1173,7 @@ parse_args() {
     export SKIP_CHECKSUM="$skip_checksum"
     export INSTALL_COMPLETIONS="$install_completions"
     export INSTALL_MANPAGE="$install_manpage"
+    export INSTALL_PACKAGE_MANPAGES="$install_package_manpages"
     export CONFIG_FILE="$config_file"
     export LIST_GROUPS="$list_groups"
     export INSTALL_GROUPS="$install_groups"
@@ -1055,6 +1202,9 @@ main() {
         if [ "$INSTALL_MANPAGE" = "true" ]; then
             echo "Would install manpage"
         fi
+        if [ "$INSTALL_PACKAGE_MANPAGES" = "true" ]; then
+            echo "Would install package man pages"
+        fi
         if [ -n "$INSTALL_GROUPS" ]; then
             echo "Would install packages from groups: $INSTALL_GROUPS"
         fi
@@ -1075,6 +1225,26 @@ main() {
     if [ "$INSTALL_MANPAGE" = "true" ]; then
         echo "Installing manpage..."
         install_manpage
+    fi
+    
+    if [ "$INSTALL_PACKAGE_MANPAGES" = "true" ]; then
+        echo "Installing package man pages..."
+        script_dir="$(cd "$(dirname "$0")" && pwd)"
+        config_path="$script_dir/$CONFIG_FILE"
+        
+        # Split groups by comma and install man pages for each
+        OLD_IFS="$IFS"
+        IFS=','
+        for group in $INSTALL_GROUPS; do
+            IFS="$OLD_IFS"
+            group=$(echo "$group" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            if [ -n "$group" ]; then
+                echo ""
+                echo "Installing man pages for group: $group"
+                install_package_manpages "$config_path" "$group"
+            fi
+        done
+        IFS="$OLD_IFS"
     fi
     
     # Handle package group installation
@@ -1117,6 +1287,11 @@ main() {
     if [ "$INSTALL_MANPAGE" = "true" ]; then
         echo ""
         echo "Manpage installed. View it with: man universal-install"
+    fi
+    
+    if [ "$INSTALL_PACKAGE_MANPAGES" = "true" ]; then
+        echo ""
+        echo "Package man pages installed where available."
     fi
 
     # Ensure ~/.local/bin is in PATH

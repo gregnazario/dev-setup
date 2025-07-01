@@ -48,6 +48,11 @@ Supports bash, zsh, and fish shells.
 Install manpage for the installer.
 
 .TP
+.B \-\-install-package-manpages
+Install man pages for packages in groups. Attempts to install documentation
+packages (like -doc packages) for packages in the specified groups.
+
+.TP
 .B \-\-config \fIFILE\fR
 Use custom TOML configuration file (default: packages.toml).
 
@@ -125,6 +130,10 @@ Dry run to see what would be installed:
 .TP
 Install with completions and manpage:
 .B install.sh --install-completions --install-manpage
+
+.TP
+Install packages with man pages:
+.B install.sh --install-group development --install-package-manpages
 
 .TP
 List available package groups:

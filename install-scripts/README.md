@@ -82,6 +82,7 @@ Supports 50+ distributions with their native package managers:
 | `--skip-checksum` | Skip checksum verification (not recommended) |
 | `--install-completions` | Install shell completions |
 | `--install-manpage` | Install manpage |
+| `--install-package-manpages` | Install man pages for packages in groups |
 | `--config FILE` | Use custom TOML configuration file (default: packages.toml) |
 | `--list-groups` | List available package groups |
 | `--install-group GROUP` | Install packages from specified group |
@@ -178,6 +179,20 @@ Install the manpage with `--install-manpage` and view it with:
 ```bash
 man universal-install
 ```
+
+### Package Man Pages
+Install man pages for packages in groups with `--install-package-manpages`. This will attempt to install documentation packages (like `-doc` packages) for the packages in the specified groups:
+
+```bash
+./install.sh --install-group development --install-package-manpages
+```
+
+The script handles different package managers:
+- **Debian-based**: Installs `-doc` packages (e.g., `git-doc`)
+- **Red Hat-based**: Installs `-doc` packages (e.g., `git-doc`)
+- **SUSE-based**: Installs `-doc` packages (e.g., `git-doc`)
+- **Mageia**: Installs `-doc` packages (e.g., `git-doc`)
+- **Other distributions**: Man pages are usually included with the main package
 
 ### Help
 Get help anytime with:
