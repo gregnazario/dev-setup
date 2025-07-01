@@ -1,0 +1,500 @@
+# Universal Installer Package Configuration
+# This file defines groups of tools that can be installed across different platforms
+
+[metadata]
+name = "Universal Installer Packages"
+version = "1.0.0"
+description = "Cross-platform package groups for development and productivity"
+author = "Universal Installer Team"
+
+# Development Tools Group
+[groups.development]
+name = "Development Tools"
+description = "Essential development tools and utilities"
+packages = [
+    "git",
+    "vim",
+    "neovim",
+    "curl",
+    "wget",
+    "jq",
+    "tree",
+    "htop",
+    "tmux",
+    "fzf",
+    "ripgrep",
+    "bat",
+    "exa",
+    "fd",
+    "tldr"
+]
+
+# Platform-specific overrides for development tools
+[groups.development.platforms]
+# macOS specific packages (using Homebrew)
+macos = [
+    "git",
+    "vim",
+    "neovim",
+    "curl",
+    "wget",
+    "jq",
+    "tree",
+    "htop",
+    "tmux",
+    "fzf",
+    "ripgrep",
+    "bat",
+    "exa",
+    "fd",
+    "tldr",
+    "coreutils",
+    "gnu-sed",
+    "gnu-tar"
+]
+
+# Linux Debian-based distributions
+linux.debian = [
+    "git",
+    "vim",
+    "neovim",
+    "curl",
+    "wget",
+    "jq",
+    "tree",
+    "htop",
+    "tmux",
+    "fzf",
+    "ripgrep",
+    "bat",
+    "exa",
+    "fd",
+    "tldr",
+    "build-essential"
+]
+
+# Linux Red Hat-based distributions
+linux.redhat = [
+    "git",
+    "vim",
+    "neovim",
+    "curl",
+    "wget",
+    "jq",
+    "tree",
+    "htop",
+    "tmux",
+    "fzf",
+    "ripgrep",
+    "bat",
+    "exa",
+    "fd",
+    "tldr",
+    "gcc",
+    "make"
+]
+
+# Linux Arch-based distributions
+linux.arch = [
+    "git",
+    "vim",
+    "neovim",
+    "curl",
+    "wget",
+    "jq",
+    "tree",
+    "htop",
+    "tmux",
+    "fzf",
+    "ripgrep",
+    "bat",
+    "exa",
+    "fd",
+    "tldr",
+    "base-devel"
+]
+
+# Python Group
+[groups.python]
+name = "Python"
+description = "Python programming language and tools"
+packages = [
+    "python3",
+    "pip"
+]
+
+[groups.python.platforms]
+macos = [
+    "python",
+    "pip"
+]
+
+linux.debian = [
+    "python3",
+    "python3-pip",
+    "python3-venv",
+    "python3-dev"
+]
+
+linux.redhat = [
+    "python3",
+    "python3-pip",
+    "python3-devel"
+]
+
+linux.arch = [
+    "python",
+    "python-pip"
+]
+
+# Node.js Group
+[groups.nodejs]
+name = "Node.js"
+description = "Node.js JavaScript runtime and npm"
+packages = [
+    "nodejs",
+    "npm"
+]
+
+[groups.nodejs.platforms]
+macos = [
+    "node",
+    "npm"
+]
+
+linux.debian = [
+    "nodejs",
+    "npm"
+]
+
+linux.redhat = [
+    "nodejs",
+    "npm"
+]
+
+linux.arch = [
+    "nodejs",
+    "npm"
+]
+
+# Rust Group
+[groups.rust]
+name = "Rust"
+description = "Rust programming language and Cargo"
+packages = [
+    "rust",
+    "cargo"
+]
+
+[groups.rust.platforms]
+macos = [
+    "rust",
+    "cargo"
+]
+
+linux.debian = [
+    "rustc",
+    "cargo"
+]
+
+linux.redhat = [
+    "rust",
+    "cargo"
+]
+
+linux.arch = [
+    "rust",
+    "cargo"
+]
+
+# Go Group
+[groups.go]
+name = "Go"
+description = "Go programming language"
+packages = [
+    "go"
+]
+
+[groups.go.platforms]
+macos = [
+    "go"
+]
+
+linux.debian = [
+    "golang-go"
+]
+
+linux.redhat = [
+    "golang"
+]
+
+linux.arch = [
+    "go"
+]
+
+# Java Group
+[groups.java]
+name = "Java"
+description = "Java Development Kit (JDK)"
+packages = [
+    "java"
+]
+
+[groups.java.platforms]
+macos = [
+    "openjdk"
+]
+
+linux.debian = [
+    "openjdk-11-jdk"
+]
+
+linux.redhat = [
+    "java-11-openjdk-devel"
+]
+
+linux.arch = [
+    "jdk-openjdk"
+]
+
+# Container Tools Group
+[groups.containers]
+name = "Container Tools"
+description = "Docker and container management tools"
+packages = [
+    "docker",
+    "docker-compose",
+    "kubectl"
+]
+
+[groups.containers.platforms]
+macos = [
+    "docker",
+    "docker-compose",
+    "kubectl"
+]
+
+linux.debian = [
+    "docker.io",
+    "docker-compose",
+    "kubectl"
+]
+
+linux.redhat = [
+    "docker",
+    "docker-compose",
+    "kubectl"
+]
+
+linux.arch = [
+    "docker",
+    "docker-compose",
+    "kubectl"
+]
+
+# Cloud Tools Group
+[groups.cloud]
+name = "Cloud Tools"
+description = "Cloud platform CLI tools"
+packages = [
+    "aws-cli",
+    "azure-cli",
+    "gcloud"
+]
+
+[groups.cloud.platforms]
+macos = [
+    "awscli",
+    "azure-cli",
+    "google-cloud-sdk"
+]
+
+linux.debian = [
+    "awscli",
+    "azure-cli",
+    "google-cloud-sdk"
+]
+
+linux.redhat = [
+    "awscli",
+    "azure-cli",
+    "google-cloud-sdk"
+]
+
+linux.arch = [
+    "aws-cli",
+    "azure-cli",
+    "google-cloud-sdk"
+]
+
+# Database Tools Group
+[groups.databases]
+name = "Database Tools"
+description = "Database clients and management tools"
+packages = [
+    "postgresql-client",
+    "mysql-client",
+    "redis-tools"
+]
+
+[groups.databases.platforms]
+macos = [
+    "postgresql",
+    "mysql",
+    "redis"
+]
+
+linux.debian = [
+    "postgresql-client",
+    "mysql-client",
+    "redis-tools"
+]
+
+linux.redhat = [
+    "postgresql",
+    "mysql",
+    "redis"
+]
+
+linux.arch = [
+    "postgresql",
+    "mysql",
+    "redis"
+]
+
+# Security Tools Group
+[groups.security]
+name = "Security Tools"
+description = "Security and penetration testing tools"
+packages = [
+    "nmap",
+    "wireshark",
+    "openssl"
+]
+
+[groups.security.platforms]
+macos = [
+    "nmap",
+    "wireshark",
+    "openssl"
+]
+
+linux.debian = [
+    "nmap",
+    "wireshark",
+    "openssl"
+]
+
+linux.redhat = [
+    "nmap",
+    "wireshark",
+    "openssl"
+]
+
+linux.arch = [
+    "nmap",
+    "wireshark",
+    "openssl"
+]
+
+# Minimal Group (for basic systems)
+[groups.minimal]
+name = "Minimal Tools"
+description = "Basic essential tools only"
+packages = [
+    "git",
+    "curl",
+    "vim"
+]
+
+[groups.minimal.platforms]
+macos = [
+    "git",
+    "curl",
+    "vim"
+]
+
+linux.debian = [
+    "git",
+    "curl",
+    "vim"
+]
+
+linux.redhat = [
+    "git",
+    "curl",
+    "vim"
+]
+
+linux.arch = [
+    "git",
+    "curl",
+    "vim"
+]
+
+# Package manager mappings for different platforms
+[package_managers]
+macos = "brew"
+linux.debian = "apt"
+linux.redhat = "dnf"
+linux.arch = "pacman"
+linux.suse = "zypper"
+linux.alpine = "apk"
+linux.gentoo = "emerge"
+linux.void = "xbps"
+linux.nixos = "nix"
+linux.slackware = "slackpkg"
+linux.solus = "eopkg"
+linux.clear = "swupd"
+linux.pclinuxos = "apt-get"
+linux.mageia = "urpmi"
+linux.openmandriva = "dnf"
+freebsd = "pkg"
+netbsd = "pkgin"
+windows = "winget"
+
+# Package name mappings for different package managers
+[package_mappings]
+# macOS (Homebrew) mappings
+macos = {
+    "python3" = "python",
+    "nodejs" = "node",
+    "postgresql-client" = "postgresql",
+    "mysql-client" = "mysql",
+    "aws-cli" = "awscli",
+    "docker-compose" = "docker-compose",
+    "redis-tools" = "redis"
+}
+
+# Linux Debian-based mappings
+linux.debian = {
+    "python3" = "python3",
+    "nodejs" = "nodejs",
+    "postgresql-client" = "postgresql-client",
+    "mysql-client" = "mysql-client",
+    "aws-cli" = "awscli",
+    "docker-compose" = "docker-compose",
+    "redis-tools" = "redis-tools"
+}
+
+# Linux Red Hat-based mappings
+linux.redhat = {
+    "python3" = "python3",
+    "nodejs" = "nodejs",
+    "postgresql-client" = "postgresql",
+    "mysql-client" = "mysql",
+    "aws-cli" = "awscli",
+    "docker-compose" = "docker-compose",
+    "redis-tools" = "redis"
+}
+
+# Linux Arch-based mappings
+linux.arch = {
+    "python3" = "python",
+    "nodejs" = "nodejs",
+    "postgresql-client" = "postgresql",
+    "mysql-client" = "mysql",
+    "aws-cli" = "aws-cli",
+    "docker-compose" = "docker-compose",
+    "redis-tools" = "redis"
+} 

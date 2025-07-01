@@ -1,0 +1,18 @@
+# Universal Installer bash completion script
+
+_universal_install_completion() {
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    
+    opts="--help --version --dry-run --skip-checksum --install-completions --install-manpage --config --list-groups --install-group development python nodejs rust go java containers cloud databases security minimal"
+    
+    if [[ ${cur} == * ]] ; then
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
+    fi
+}
+
+complete -F _universal_install_completion install.sh
+complete -F _universal_install_completion universal-install 

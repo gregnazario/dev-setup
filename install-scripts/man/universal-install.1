@@ -1,0 +1,220 @@
+.TH UNIVERSAL-INSTALL 1 "2024" "Universal Installer" "User Commands"
+
+.SH NAME
+universal-install \- Cross-platform package installer setup script
+
+.SH SYNOPSIS
+.B install.sh
+[\fIOPTIONS\fR] [\fIPACKAGE_GROUPS\fR]
+
+.SH DESCRIPTION
+.B universal-install
+is a cross-platform script that sets up the Universal Installer on your system.
+It automatically detects your platform and package manager, then downloads and
+installs the Universal Installer tools. It can also install packages from
+TOML configuration files, allowing for easy setup of development environments
+across different platforms.
+
+The script supports multiple operating systems and their native package managers,
+ensuring optimal compatibility and performance on each platform.
+
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Show help message and exit.
+
+.TP
+.BR \-v ", " \-\-version
+Show version information and exit.
+
+.TP
+.B \-\-dry-run
+Show what would be done without actually performing the installation.
+Useful for previewing the installation process.
+
+.TP
+.B \-\-skip-checksum
+Skip checksum verification of downloaded files (not recommended).
+The script automatically detects available checksum tools (shasum, sha256sum, or openssl).
+Use only if you're experiencing network issues with checksum verification.
+
+.TP
+.B \-\-install-completions
+Install shell completion scripts for the installer.
+Supports bash, zsh, and fish shells.
+
+.TP
+.B \-\-install-manpage
+Install manpage for the installer.
+
+.TP
+.B \-\-config \fIFILE\fR
+Use custom TOML configuration file (default: packages.toml).
+
+.TP
+.B \-\-list-groups
+List available package groups from the TOML configuration.
+
+.TP
+.B \-\-install-group \fIGROUP\fR
+Install packages from specified group. Multiple groups can be specified
+as comma-separated values (e.g., "development,languages").
+Provides detailed documentation accessible via the man command.
+
+.SH SUPPORTED PLATFORMS
+.TP
+.B macOS
+Uses Homebrew package manager. If Homebrew is not installed, it will be
+automatically installed.
+
+.TP
+.B Linux
+Supports multiple distributions with their native package managers:
+.RS
+.IP \(bu 2
+Debian-based: apt (Ubuntu, Debian, Linux Mint, Pop!_OS, Elementary OS, Kali Linux, Parrot OS, MX Linux, Devuan, Deepin, Zorin OS)
+.IP \(bu 2
+Red Hat-based: dnf/yum (Fedora, RHEL, CentOS, Rocky Linux, AlmaLinux, Oracle Linux, Amazon Linux, Scientific Linux)
+.IP \(bu 2
+Arch-based: pacman (Arch Linux, Manjaro, EndeavourOS, Garuda Linux, ArcoLinux, Artix Linux)
+.IP \(bu 2
+SUSE-based: zypper (openSUSE, SUSE Linux Enterprise, Tumbleweed, Leap)
+.IP \(bu 2
+Alpine: apk (Alpine Linux)
+.IP \(bu 2
+Gentoo: emerge (Gentoo, Funtoo, Calculate Linux)
+.IP \(bu 2
+Void: xbps (Void Linux)
+.IP \(bu 2
+NixOS: nix (NixOS)
+.IP \(bu 2
+Slackware: slackpkg (Slackware, Slax, Salix)
+.IP \(bu 2
+Solus: eopkg (Solus)
+.IP \(bu 2
+Clear Linux: swupd (Intel Clear Linux)
+.IP \(bu 2
+PCLinuxOS: apt-get (PCLinuxOS)
+.IP \(bu 2
+Mageia: urpmi (Mageia)
+.IP \(bu 2
+OpenMandriva: dnf (OpenMandriva)
+.RE
+
+.TP
+.B FreeBSD
+Uses pkg package manager (native FreeBSD package manager).
+
+.TP
+.B NetBSD
+Uses pkgin package manager (native NetBSD package manager).
+
+.TP
+.B Windows
+Uses winget (native Windows package manager) or falls back to Chocolatey.
+
+.SH EXAMPLES
+.TP
+Normal installation:
+.B install.sh
+
+.TP
+Dry run to see what would be installed:
+.B install.sh --dry-run
+
+.TP
+Install with completions and manpage:
+.B install.sh --install-completions --install-manpage
+
+.TP
+List available package groups:
+.B install.sh --list-groups
+
+.TP
+Install development tools:
+.B install.sh --install-group development
+
+.TP
+Install multiple groups:
+.B install.sh --install-group development,python,nodejs
+
+.TP
+Use custom configuration:
+.B install.sh --config custom.toml --install-group minimal
+
+.TP
+Install with completions only:
+.B install.sh --install-completions
+
+.TP
+Show help:
+.B install.sh --help
+
+.SH FILES
+.TP
+.B ~/.local/bin/universal-install
+Main installer binary
+.TP
+.B ~/.local/bin/universal-uninstall
+Uninstaller binary
+.TP
+.B ~/.local/share/bash-completion/completions/universal-install
+Bash completion script
+.TP
+.B ~/.local/share/zsh/site-functions/_universal-install
+Zsh completion script
+.TP
+.B ~/.config/fish/completions/universal-install.fish
+Fish completion script
+.TP
+.B ~/.local/share/man/man1/universal-install.1
+Manpage
+
+.TP
+.B packages.toml
+Default TOML configuration file for package groups
+
+.SH ENVIRONMENT
+.TP
+.B SHELL
+Used to determine which shell completions to install.
+The script automatically detects bash, zsh, and fish shells.
+
+.SH EXIT STATUS
+.TP
+.B 0
+Successful completion
+.TP
+.B 1
+Error occurred (invalid options, missing dependencies, network issues, etc.)
+
+.SH DIAGNOSTICS
+The script provides detailed output about:
+.IP \(bu 2
+Platform detection results
+.IP \(bu 2
+Package manager identification
+.IP \(bu 2
+Download progress and verification
+.IP \(bu 2
+Installation status
+.IP \(bu 2
+Completion and manpage installation status
+
+.SH SECURITY
+The script downloads files from GitHub releases and verifies their integrity
+using SHA256 checksums. The --skip-checksum option should only be used in
+emergency situations where checksum verification is failing due to network issues.
+
+.SH AUTHOR
+Universal Installer Team
+
+.SH BUGS
+Report bugs to: https://github.com/gregnazario/universal-installer/issues
+
+.SH COPYRIGHT
+Copyright (c) 2024 Universal Installer Team. This is free software.
+
+.SH SEE ALSO
+.BR universal-install (1),
+.BR universal-uninstall (1) 
